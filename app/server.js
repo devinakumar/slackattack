@@ -10,13 +10,6 @@ const yelp = new Yelp({
   token_secret: process.env.YELP_TOKEN_SECRET,
 });
 
-// const yelp = new Yelp({
-//   consumer_key: 'm-dYPN9X5jH3sCvnZatOkg',
-//   consumer_secret: 'AWvR11AXQvzM-C98tf7uD-R9F3A',
-//   token: '9hht0thMOLNM-myL2rxlDhUoeHIc8HSm',
-//   token_secret: 'rnZMC5fMTj5UKcPYvAGVcXNsopM',
-// });
-
 // code for starting up bot taken from CS52 assignment 2 GitHub repo: https://github.com/dartmouth-cs52/slackattack
 console.log('starting bot');
 
@@ -169,8 +162,16 @@ controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'menti
   });
 });
 
+// outgoing webhook
 controller.on('outgoing_webhook', (bot, message) => {
-  bot.replyPublic(message, 'fine I\'m up');
+  bot.replyPublic(message, {
+    text: 'Let me sleep.',
+    attachments: [
+      {
+        image_url: 'http://giphy.com/gifs/26vULbbOhi45zev9S/html5',
+      },
+    ],
+  });
 });
 
 // response for random messages
