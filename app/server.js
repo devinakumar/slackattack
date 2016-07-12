@@ -1,8 +1,8 @@
-// code for example bot taken from CS52 assignment 2 GitHub repo: https://github.com/dartmouth-cs52/slackattack
-// example bot
+// imports needed
 import botkit from 'botkit';
 import Yelp from 'yelp';
-//
+
+// yelp api
 const yelp = new Yelp({
   consumer_key: process.env.YELP_CONSUMER_KEY,
   consumer_secret: process.env.YELP_CONSUMER_SECRET,
@@ -17,6 +17,7 @@ const yelp = new Yelp({
 //   token_secret: 'rnZMC5fMTj5UKcPYvAGVcXNsopM',
 // });
 
+// code for starting up bot taken from CS52 assignment 2 GitHub repo: https://github.com/dartmouth-cs52/slackattack
 console.log('starting bot');
 
 // botkit controller
@@ -34,17 +35,16 @@ const slackbot = controller.spawn({
 });
 
 // prepare webhook
-// for now we won't use this but feel free to look up slack webhooks
 controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
   controller.createWebhookEndpoints(webserver, slackbot, () => {
     if (err) { throw new Error(err); }
   });
 });
 
-// example hello response
-// controller.on('message_received', (bot, message) => {
-//   bot.reply(message, 'I heard... something!');
-// });
+// help response
+controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+  bot.reply(message, 'Ask me how I am, and I\'ll have a conversation with you!  Type in "food near me" and I can give you some killer recommendations.');
+});
 
 // hello response
 controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
@@ -57,18 +57,57 @@ controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_men
   });
 });
 
+// favorite color response
 controller.hears(['your favorite color'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'My favorite color is red.');
 });
 
-// start a conversation to handle this response.
+// small talk conversation
+controller.hears(['how are you?'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+  bot.startConversation(message, (err, convo) => {
+    convo.ask('Good.  Are you doing well?', [
+      {
+        pattern: bot.utterances.yes,
+        callback: (response, convo2) => {
+          convo.say('Good to hear!');
+          convo.next();
+        },
+      },
+      {
+        pattern: bot.utterances.no,
+        callback: (response, convo3) => {
+          convo.ask('I\'m sorry to hear that.  Do you want to stress-eat the pain away?', [
+            {
+              pattern: bot.utterances.yes,
+              callback: (response2, convo4) => {
+                convo.say('Definitely the right decision.  Just type in "find me some food" and I\'ll get started on it right away.');
+                convo.next();
+              },
+            },
+            {
+              pattern: bot.utterances.no,
+              callback: (response3, convo5) => {
+                convo.say('Ok.  But you\'re a star!  Say "help me" to see what I can do for you.');
+                convo.next();
+              },
+            },
+          ]);
+          convo.next();
+        },
+      },
+    ]);
+    convo.next();
+  });
+});
+
+// food recommendation conversation
 controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.startConversation(message, (err, convo) => {
     convo.ask('Are you hungry? Reply "yes" or "no".', [
       {
         pattern: bot.utterances.yes,
         callback: (response, convo2) => {
-          convo.say('Awesome!');
+          convo.say('Awesome! Let me give you some recommendations.');
           convo.ask('What kind of food are you in the mood for?', (food, convo3) => {
             convo.ask('Where are you?', (place, convo4) => {
               convo.say(`Sounds good.  Finding ${food.text} near you.`);
@@ -96,7 +135,6 @@ controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'menti
           });
           convo.next();
         },
-          //  convo.next();
       },
       {
         pattern: bot.utterances.no,
@@ -128,45 +166,11 @@ controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'menti
         },
       },
     ]);
-      // convo.say(`so you said: ${response.text}`);
-      // convo.next();
   });
 });
-// yelp.search({ term: 'food', location: 'Montreal' })
-// .then((data) => {
-//   console.log(data);
-//   // console.log(data.businesses[0].name);
-// }).catch((err) => { // There was an error with the API call
-//   console.error(err); // Log the API call error to the console
-// });
 
-// controller.on('user_typing', (bot, message) => {
-//   bot.reply(message, 'stop typing!');
-// });
-// code for Yelp functionality inspired by Yelp-sponsored GtiHub repo: https://github.com/olalonde/node-yelp
-
-
-// });
-// .catch(function (err) {
-//   console.error(err);
-// });
-//
-// // See http://www.yelp.com/developers/documentation/v2/business
-// yelp.business('yelp-san-francisco')
-//   .then(console.log)
-//   .catch(console.error);
-//
-// yelp.phoneSearch({ phone: '+15555555555' })
-//   .then(console.log)
-//   .catch(console.error);
-
-// A callback based API is also available:
-// yelp.business('yelp-san-francisco', function(err, data) {
-//   if (err) return console.log(error);
-//   console.log(data);
-// });
-// example hello response
+// response for random messages
 controller.on(['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'Hmmm...I don\'t quite understand that.  What are you talking about?');
-  bot.reply(message, 'Ask for help if you want to know what I can do!');
+  bot.reply(message, 'Ask for help if you want to know what I can do!  Just say "help me".');
 });
