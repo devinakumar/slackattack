@@ -34,6 +34,21 @@ controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
   });
 });
 
+// outgoing webhook
+// controller.on('outgoing_webhook', (bot, message) => {
+//   bot.replyPublic(message, {
+//     pretext: 'Let me sleep.',
+//     attachments: [
+//       {
+//         image_url: 'http://i.giphy.com/26vULbbOhi45zev9S.gif',
+//       },
+//     ],
+//   });
+// });
+controller.on('outgoing_webhook', (bot, message) => {
+  bot.replyPublic(message, 'Waking up');
+});
+
 // help response
 controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'Ask me how I am, and I\'ll have a conversation with you!  Type in "food near me" and I can give you some killer recommendations.');
@@ -162,17 +177,6 @@ controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'menti
   });
 });
 
-// outgoing webhook
-controller.on('outgoing_webhook', (bot, message) => {
-  bot.replyPublic(message, {
-    pretext: 'Let me sleep.',
-    attachments: [
-      {
-        image_url: 'http://i.giphy.com/26vULbbOhi45zev9S.gif',
-      },
-    ],
-  });
-});
 
 // response for random messages
 controller.on(['direct_message', 'direct_mention', 'mention'], (bot, message) => {
