@@ -3,19 +3,19 @@
 import botkit from 'botkit';
 import Yelp from 'yelp';
 //
-// const yelp = new Yelp({
-//   consumer_key: process.env.YELP_CONSUMER_KEY,
-//   consumer_secret: process.env.YELP_CONSUMER_SECRET,
-//   token: process.env.YELP_TOKEN,
-//   token_secret: process.env.YELP_TOKEN_SECRET,
-// });
-
 const yelp = new Yelp({
-  consumer_key: 'm-dYPN9X5jH3sCvnZatOkg',
-  consumer_secret: 'AWvR11AXQvzM-C98tf7uD-R9F3A',
-  token: '9hht0thMOLNM-myL2rxlDhUoeHIc8HSm',
-  token_secret: 'rnZMC5fMTj5UKcPYvAGVcXNsopM',
+  consumer_key: process.env.YELP_CONSUMER_KEY,
+  consumer_secret: process.env.YELP_CONSUMER_SECRET,
+  token: process.env.YELP_TOKEN,
+  token_secret: process.env.YELP_TOKEN_SECRET,
 });
+
+// const yelp = new Yelp({
+//   consumer_key: 'm-dYPN9X5jH3sCvnZatOkg',
+//   consumer_secret: 'AWvR11AXQvzM-C98tf7uD-R9F3A',
+//   token: '9hht0thMOLNM-myL2rxlDhUoeHIc8HSm',
+//   token_secret: 'rnZMC5fMTj5UKcPYvAGVcXNsopM',
+// });
 
 console.log('starting bot');
 
@@ -77,15 +77,15 @@ controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'menti
                   bot.reply(message,
                     {
                       // username: `${data.businesses[0].name}`,
-                      text: `${data.businesses[0].rating}`,
+                      text: `rating: ${data.businesses[0].rating} stars out of 5`,
                       attachments: [
                         {
                           title: `${data.businesses[0].name}`,
+                          title_link: `${data.businesses[0].url}`,
                           text: `${data.businesses[0].snippet_text}`,
                           image_url: `${data.businesses[0].image_url}`,
                         },
                       ],
-
                     });
                 }).catch((err) => {
                   console.error(err);
