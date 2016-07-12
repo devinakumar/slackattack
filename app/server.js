@@ -41,10 +41,6 @@ controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
   });
 });
 
-controller.on('outgoing_webhook', (bot, message) => {
-  bot.replyPublic(message, 'fine I\'m up');
-});
-
 // help response
 controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'Ask me how I am, and I\'ll have a conversation with you!  Type in "food near me" and I can give you some killer recommendations.');
@@ -171,6 +167,10 @@ controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'menti
       },
     ]);
   });
+});
+
+controller.on('outgoing_webhook', (bot, message) => {
+  bot.replyPublic(message, 'fine I\'m up');
 });
 
 // response for random messages
