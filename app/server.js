@@ -174,3 +174,15 @@ controller.on(['direct_message', 'direct_mention', 'mention'], (bot, message) =>
   bot.reply(message, 'Hmmm...I don\'t quite understand that.  What are you talking about?');
   bot.reply(message, 'Ask for help if you want to know what I can do!  Just say "help me".');
 });
+
+controller.on('outgoing_webhook', (bot, message) => {
+  bot.replyPublic(message,
+    {
+      text: 'Just let me sleep.',
+      attachments: [
+        {
+          image_url: 'http://giphy.com/gifs/26vULbbOhi45zev9S/html5',
+        },
+      ],
+    });
+});
