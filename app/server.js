@@ -3,6 +3,8 @@ import botkit from 'botkit';
 import Yelp from 'yelp';
 
 // yelp api
+// yelp api node.js usage from : https://github.com/olalonde/node-yelp
+
 const yelp = new Yelp({
   consumer_key: process.env.YELP_CONSUMER_KEY,
   consumer_secret: process.env.YELP_CONSUMER_SECRET,
@@ -35,19 +37,20 @@ controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
 });
 
 // outgoing webhook
-// controller.on('outgoing_webhook', (bot, message) => {
-//   bot.replyPublic(message, {
-//     pretext: 'Let me sleep.',
-//     attachments: [
-//       {
-//         image_url: 'http://i.giphy.com/26vULbbOhi45zev9S.gif',
-//       },
-//     ],
-//   });
-// });
 controller.on('outgoing_webhook', (bot, message) => {
-  bot.replyPublic(message, 'Waking up');
+  bot.replyPublic(message, {
+    pretext: 'Let me sleep.',
+    attachments: [
+      {
+        image_url: 'http://i.giphy.com/26vULbbOhi45zev9S.gif',
+      },
+    ],
+  });
 });
+
+// controller.on('outgoing_webhook', (bot, message) => {
+//   bot.replyPublic(message, 'Waking up');
+// });
 
 // help response
 controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
@@ -71,6 +74,7 @@ controller.hears(['your favorite color'], ['direct_message', 'direct_mention', '
 });
 
 // small talk conversation
+// multi-message conversation inspired by code from : https://github.com/howdyai/botkit/blob/master/readme.md#multi-message-replies-to-incoming-messages
 controller.hears(['how are you?'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.startConversation(message, (err, convo) => {
     convo.ask('Good.  Are you doing well?', [
@@ -109,6 +113,7 @@ controller.hears(['how are you?'], ['direct_message', 'direct_mention', 'mention
 });
 
 // food recommendation conversation
+// multi-message conversation inspired by: https://github.com/howdyai/botkit/blob/master/readme.md#multi-message-replies-to-incoming-messages
 controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.startConversation(message, (err, convo) => {
     convo.ask('Are you hungry? Reply "yes" or "no".', [
