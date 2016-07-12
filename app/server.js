@@ -42,10 +42,7 @@ controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
 });
 
 controller.on('outgoing_webhook', (bot, message) => {
-  bot.replyPublic(message,
-    {
-      text: 'Just let me sleep.',
-    });
+  bot.replyPublic(message, 'fine I\'m up');
 });
 
 // help response
