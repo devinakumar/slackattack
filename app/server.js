@@ -165,10 +165,10 @@ controller.hears(['hungry', 'food'], ['direct_message', 'direct_mention', 'menti
 // outgoing webhook
 controller.on('outgoing_webhook', (bot, message) => {
   bot.replyPublic(message, {
-    text: 'Let me sleep.',
+    pretext: 'Let me sleep.',
     attachments: [
       {
-        image_url: 'http://giphy.com/gifs/26vULbbOhi45zev9S/html5',
+        image_url: 'http://i.giphy.com/26vULbbOhi45zev9S.gif',
       },
     ],
   });
