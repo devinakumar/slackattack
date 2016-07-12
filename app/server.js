@@ -38,19 +38,8 @@ controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
 
 // outgoing webhook
 controller.on('outgoing_webhook', (bot, message) => {
-  bot.replyPublic(message, {
-    pretext: 'Let me sleep.',
-    attachments: [
-      {
-        image_url: 'http://i.giphy.com/26vULbbOhi45zev9S.gif',
-      },
-    ],
-  });
+  bot.replyPublic(message, 'Fine, I\'m waking up.');
 });
-
-// controller.on('outgoing_webhook', (bot, message) => {
-//   bot.replyPublic(message, 'Waking up');
-// });
 
 // help response
 controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
