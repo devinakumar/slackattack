@@ -45,11 +45,6 @@ controller.on('outgoing_webhook', (bot, message) => {
   bot.replyPublic(message,
     {
       text: 'Just let me sleep.',
-      attachments: [
-        {
-          image_url: 'http://giphy.com/gifs/26vULbbOhi45zev9S/html5',
-        },
-      ],
     });
 });
 
